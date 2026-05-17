@@ -9,9 +9,11 @@ function loadEnv($path) {
     foreach ($lines as $line) {
         if (strpos(trim($line), '#') === 0) continue;
 
-        list($name, $value) = explode('=', $line, 2);
-        $name = trim($name);
-        $value = trim($value);
+        $parts = explode('=', $line, 2);
+        if (count($parts) < 2) continue;
+        
+        $name = trim($parts[0]);
+        $value = trim($parts[1]);
 
         if (!array_key_exists($name, $_SERVER) && !array_key_exists($name, $_ENV)) {
             putenv(sprintf('%s=%s', $name, $value));
@@ -36,6 +38,5 @@ if (!$conexion) {
     die("Error de conexión: " . mysqli_connect_error());
 }
 
-// Establecer el conjunto de caracteres a utf8mb4 para manejar caracteres como la 'ñ'
 mysqli_set_charset($conexion, "utf8mb4");
 ?>
